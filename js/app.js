@@ -20,7 +20,7 @@ function findCartItem(cart, name) {
 }
 
 function updateCartItem(cartItem, price, quantity) {
-    let existingQuantity = cartItem.querySelector('.texto-azul:first-child').innerText;
+    let existingQuantity = Math.round(parseFloat(cartItem.querySelector('.texto-azul:first-child').innerText));
     let newQuantity = existingQuantity + quantity;
     let newPrice = price * newQuantity;
 
@@ -44,8 +44,8 @@ function createNewCartItem(cart, name, price, quantity) {
 function createItemCart() {
     let item = getItems().split(' - ');
     let name = item[0];
-    let price = item[1].replace('R$', '');
-    let quantity = getQuantity();
+    let price = Math.round(parseFloat(item[1].replace('R$', '')));
+    let quantity = Math.round(parseFloat(getQuantity()));
     const cart = getCart()[0];
 
     let existingItem = findCartItem(cart, name);
@@ -53,14 +53,15 @@ function createItemCart() {
     if (existingItem) {
         let newPrice = updateCartItem(existingItem, price, quantity);
 
-         let index = Array.from(cart.getElementsByClassName('carrinho__produtos__produto'))
+        let index = Array.from(cart.getElementsByClassName('carrinho__produtos__produto'))
             .indexOf(existingItem);
-
         productPricesArray[index] = newPrice;
     } else {
         createNewCartItem(cart, name, price, quantity);
     }
 }
+
+
 
 function sumTotal() {
     let total = productPricesArray.reduce((acc, value) => acc + value, 0);
