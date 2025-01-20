@@ -11,10 +11,6 @@
 
 Total: <span class="texto-azul" id="valor-total">R$1400</span> */
 
-function getCart() {
-    return document.getElementsByClassName('carrinho__produtos__produto');
-}
-
 function getElements(i) {
     const items = document.getElementsByTagName('option');
 
@@ -25,6 +21,10 @@ function getElements(i) {
 
 function getQuantity() {
     return document.getElementById('quantidade').value;
+}
+
+function getCart() {
+    return document.getElementsByClassName('carrinho__produtos__produto');
 }
 
 function getTotal() {
