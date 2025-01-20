@@ -1,20 +1,8 @@
-/* <option value="Fone de ouvido - R$100">Fone de ouvido - R$100</option>
-<option value="Celular - R$1400">Celular - R$1400</option>
-<option value="Oculus VR - R$5000">Oculus VR - R$5000</option>
-
-<input class="quantidade-input" id="quantidade" type="number" placeholder="100">
-
-<button onclick="adicionar()" type="button" class="botao-form botao-adicionar">Adicionar</button>
-<button onclick="limpar()" type="button" class="botao-form botao-limpar">Limpar</button>
-
-<section class="carrinho__produtos__produto">
-
-Total: <span class="texto-azul" id="valor-total">R$1400</span> */
+let productPricesArray = [];
 
 function getItems() {
     const items = document.getElementsByTagName('option');
     const selectedIndex = document.getElementById('produto').selectedIndex;
-
     return items[selectedIndex].value;
 }
 
@@ -34,8 +22,54 @@ function getCart() {
     return document.getElementsByClassName('carrinho__produtos');
 }
 
-function getTotal() {
-    return document.getElementById('valor-total').innerText;
+function findCartItem(cart, name) {
+    return Array.from(cart.getElementsByClassName('carrinho__produtos__produto'))
+        .find(cartItem => cartItem.textContent.includes(name));
+}
+
+function updateCartItem(cartItem, price, quantity) {
+    let existingQuantity = parseInt(cartItem.querySelector('.texto-azul:first-child').innerText);
+    let newQuantity = existingQuantity + quantity;
+    let newPrice = price * newQuantity;
+
+    cartItem.querySelector('.texto-azul:first-child').innerText = `${newQuantity}x`;
+    cartItem.querySelector('.texto-azul:last-child').innerText = `R$${newPrice}`;
+
+    return newPrice;
+}
+
+function createNewCartItem(cart, name, price, quantity) {
+    let totalValue = price * quantity;
+    productPricesArray.push(totalValue);
+
+    const cartItem = document.createElement('section');
+    cartItem.classList.add('carrinho__produtos__produto');
+    cartItem.innerHTML = `<span class="texto-azul">${quantity}x</span> ${name} <span class="texto-azul">R$${totalValue}</span>`;
+
+    cart.appendChild(cartItem);
+}
+
+function createItemCart() {
+    let item = getItems().split(' - ');
+    let name = item[0];
+    let price = parseInt(item[1].replace('R$', ''));
+    let quantity = parseInt(getQuantity());
+    const cart = getCart()[0];
+
+    // Check if the item already exists in the cart
+    let existingItem = findCartItem(cart, name);
+
+    if (existingItem) {
+        // Update the existing item
+        let newPrice = updateCartItem(existingItem, price, quantity);
+
+        // Update the total price in the array
+        let index = Array.from(cart.getElementsByClassName('carrinho__produtos__produto')).indexOf(existingItem);
+        productPricesArray[index] = newPrice;
+    } else {
+        // Create new cart item
+        createNewCartItem(cart, name, price, quantity);
+    }
 }
 
 function sumTotalItemsPrice() {
@@ -43,27 +77,29 @@ function sumTotalItemsPrice() {
     let price = item[1];
     let quantity = getQuantity();
 
-    let totalValue = price * quantity;;
+    let totalValue = price * quantity;
+    productPricesArray.push(totalValue);
     return totalValue;
 }
 
-function createItemCart() {
-    let item = getItems().split(' - ');
-    let name = item[0];
-    let price = sumTotalItemsPrice();
-    let quantity = getQuantity();
-    const cart = getCart()[0];
-
-    const cartItem = document.createElement('section');
-    cartItem.classList.add('carrinho__produtos__produto');
-    cartItem.innerHTML = `<span class="texto-azul">${quantity}x</span> ${name} <span class="texto-azul">R$${price}</span>`;
-
-    cart.appendChild(cartItem);
+function sumTotal() {
+    let total = productPricesArray.reduce((acc, value) => acc + value, 0);
+    return total;
 }
 
+function updateTotal() {
+    const total = sumTotal();
+    document.getElementById('valor-total').innerText = `R$${total}`;
+}
 
 function adicionar() {
     createItemCart();
-};
+    updateTotal();
+}
 
-function limpar() {};
+function limpar() {
+    const cart = getCart()[0];
+    cart.innerHTML = '';
+    productPricesArray = [];
+    updateTotal();
+}
