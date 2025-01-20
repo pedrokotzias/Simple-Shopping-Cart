@@ -38,19 +38,29 @@ function getTotal() {
     return document.getElementById('valor-total').innerText;
 }
 
+function sumTotalItemsPrice() {
+    let item = getItems().split(' - R$');
+    let price = item[1];
+    let quantity = getQuantity();
+
+    let totalValue = price * quantity;;
+    return totalValue;
+}
+
 function createItemCart() {
     let item = getItems().split(' - ');
     let name = item[0];
-    let price = item[1];
+    let price = sumTotalItemsPrice();
     let quantity = getQuantity();
     const cart = getCart()[0];
 
     const cartItem = document.createElement('section');
     cartItem.classList.add('carrinho__produtos__produto');
-    cartItem.innerHTML = `<span class="texto-azul">${quantity}x</span> ${name} <span class="texto-azul">${price}</span>`;
+    cartItem.innerHTML = `<span class="texto-azul">${quantity}x</span> ${name} <span class="texto-azul">R$${price}</span>`;
 
     cart.appendChild(cartItem);
 }
+
 
 function adicionar() {
     createItemCart();
