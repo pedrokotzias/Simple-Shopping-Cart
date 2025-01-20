@@ -11,11 +11,18 @@
 
 Total: <span class="texto-azul" id="valor-total">R$1400</span> */
 
-function getElements(i) {
+function getItems() {
     const items = document.getElementsByTagName('option');
+    const selectedIndex = document.getElementById('produto').selectedIndex;
 
-    if (i >= 0 && i < items.length) {
-        return items[i].value;
+    return items[selectedIndex].value;
+}
+
+function getButtons(i) {
+    const buttons = document.getElementsByTagName('button');
+
+    if (i >= 0 && i < buttons.length) {
+        return buttons[i];
     }
 }
 
@@ -32,6 +39,7 @@ function getTotal() {
 }
 
 function adicionar() {
+    getItems()
 };
 
 function limpar() {};
