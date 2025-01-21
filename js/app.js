@@ -2,6 +2,10 @@ let productPricesArray = [];
 let cartItems = [];
 let nextId = 0;
 
+function initialInput() {
+    return document.getElementById('quantidade').value = 0;
+}
+
 function getItems() {
     const items = document.getElementsByTagName('option');
     const selectedIndex = document.getElementById('produto').selectedIndex;
@@ -109,6 +113,7 @@ function updateTotal() {
 function adicionar() {
     createItemCart();
     updateTotal();
+    initialInput();
 }
 
 function limpar() {
@@ -117,4 +122,7 @@ function limpar() {
     productPricesArray = [];
     cartItems = [];
     updateTotal();
+    initialInput();
 }
+
+initialInput();
