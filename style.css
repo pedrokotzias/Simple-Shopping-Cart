@@ -176,6 +176,13 @@ input[type="number"] {
   line-height: normal;
 }
 
+.botao-adicionar.disabled {
+  background: grey;
+  box-shadow: none;
+  color: var(--Branco, #FFF);
+  cursor: not-allowed
+}
+
 .botao-limpar {
   border-radius: 1rem;
   background: var(--Void, #01080E);

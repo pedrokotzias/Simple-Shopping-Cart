@@ -3,7 +3,9 @@ let cartItems = [];
 let nextId = 0;
 
 function initialInput() {
-    return document.getElementById('quantidade').value = 0;
+    document.getElementById('quantidade').value = 0;
+    document.getElementById('produto').selectedIndex = 0;
+    checkAddButton();
 }
 
 function getItems() {
@@ -86,7 +88,6 @@ function createItemCart() {
     updateTotal();
 }
 
-
 function removeCartItem(id) {
     const cart = getCart();
     const cartItem = cart.querySelector(`.carrinho__produtos__produto[data-id='${id}']`);
@@ -110,6 +111,29 @@ function updateTotal() {
     document.getElementById('valor-total').innerText = `R$${total}`;
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const produtInput = document.getElementById('produto');
+    const quantityInput = document.getElementById('quantidade');
+
+    produtInput.addEventListener('change', checkAddButton);
+    quantityInput.addEventListener('input', checkAddButton);
+
+    checkAddButton();
+});
+
+function checkAddButton() {
+    let quantity = getQuantity();
+    let item = getItems();
+    let addButton = document.getElementsByClassName('botao-form botao-adicionar')[0];
+    if (quantity > 0 && item !== 'Selecione um produto') {
+        addButton.disabled = false;
+        addButton.classList.remove('disabled');
+    } else {
+        addButton.disabled = true;
+        addButton.classList.add('disabled');
+    }
+}
+
 function adicionar() {
     createItemCart();
     updateTotal();
@@ -125,4 +149,5 @@ function limpar() {
     initialInput();
 }
 
+checkAddButton();
 initialInput();
